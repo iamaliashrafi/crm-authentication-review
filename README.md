@@ -60,7 +60,9 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **H-01 · Sign-in form observation.** The project owner confirmed that the local sign-in form intentionally omits a self-service password recovery option. A Superadmin selects and saves a new password for the user in the administrative panel.
 
-**H-02 · Administrative password reset (passed for fresh sign-ins).** After the Superadmin changed the local test account’s password, the old password was rejected. Burp showed HTTP 200 with `CredentialsSignin` in the callback response. The tester confirmed successful sign-in with the new password in the browser. Access by other roles to the reset function and the behavior of sessions opened before the reset remain unverified.
+**H-02 · Administrative password reset (passed for fresh sign-ins).** After the Superadmin changed the local test account’s password, the old password was rejected. Burp showed HTTP 200 with `CredentialsSignin` in the callback response. The tester confirmed successful sign-in with the new password in the browser. Access by other roles to the reset function remains unverified.
+
+**H-03 · Existing browser session after password reset (24 November 2026).** The tester refreshed the dashboard in a browser session that had been open before the Superadmin reset the test account’s password. The browser returned to the sign-in form. This result covers the single observed session.
 
 ## Coverage limits
 
