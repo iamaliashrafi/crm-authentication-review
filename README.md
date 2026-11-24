@@ -56,6 +56,10 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **G-01 · No second factor requested in the observed manager sign-in.** The tester confirmed that entering the correct email and password led directly to the manager dashboard. Burp showed a session cookie issued by the credentials callback, followed by a successful dashboard request. This observation covers the tested account, browser and local deployment. Enforcing MFA for manager accounts would add an independent check before granting dashboard access. [OWASP A07 prevention guidance](https://top10.owasp.org/2025/A07_2025-Authentication_Failures/)
 
+## Password recovery · 24 November 2026
+
+**H-01 · Sign-in form observation.** The project owner confirmed that the local sign-in form intentionally omits a self-service password recovery option. No recovery workflow was exercised. The existence of a separate recovery endpoint or an administrator-assisted reset process remains unverified.
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
