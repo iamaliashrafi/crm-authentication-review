@@ -1,38 +1,45 @@
-# بررسی احراز هویت CRM
+# CRM Authentication Review
 
-این مخزن دفتر ثبت بررسی محلی یک CRM ساخته‌شده با Next.js و Prisma است. هر چهار نقش با ایمیل و رمز عبور وارد می‌شوند. نشانی محیط آزمایش `http://localhost:3000` است. نام نقش‌ها و مسیر صفحهٔ ورود بعد از بررسی برنامه تکمیل می‌شوند.
+An educational case study of email-and-password sign-in and session handling in a CRM I built with Next.js and Prisma. I used Burp Suite to compare what the browser displayed with what the application returned over HTTP.
 
-مرجع دسته‌بندی ریسک ورود و نشست [OWASP Top 10:2025 — A07 Authentication Failures](https://top10.owasp.org/2025/A07_2025-Authentication_Failures/) است. جدول زیر سناریوهای اولیهٔ این پروژه را پوشش می‌دهد.
+**Assessment status:** In progress. All three baseline checks passed for the manager account on 24 November 2026. The application supports four roles. The other three roles were outside this test run.
 
-## روش ثبت مشاهده
+## Scope and environment
 
-CRM را با پایگاه دادهٔ آزمایشی محلی اجرا کن. در Burp Suite از بخش **Proxy → Open browser** مرورگر را باز کن، **Intercept** را خاموش بگذار و به نشانی محلی برو. درخواست‌های عادی برنامه را در **Proxy → HTTP history** ببین. برای هر نقش یک حساب آزمایشی و یک نشست تازه استفاده کن. ابتدا ورود ناموفق، سپس ورود موفق و در پایان خروج را بررسی کن.
+| Item | Assessment details |
+| --- | --- |
+| Target | My local CRM development instance at `http://localhost:3000` |
+| Test account | Manager role, using the sign-in page at `/` and the dashboard at `/manager` |
+| Tools | Burp Suite Proxy, HTTP history, and browser |
+| Reference | [OWASP Top 10:2025 — A07 Authentication Failures](https://top10.owasp.org/2025/A07_2025-Authentication_Failures/) |
+| Build | Application commit and build number were not recorded for this run |
 
-## سناریوهای هر نقش
+## Objective and method
 
-| شناسه | اقدام | نتیجهٔ مورد انتظار |
-| --- | --- | --- |
-| A | در نشست تازه، با ایمیل حساب آزمایشی و رمز اشتباه وارد شو. | برنامه خطای ورود نشان دهد و صفحهٔ محافظت‌شده اطلاعات حساب را نمایش ندهد. |
-| B | با همان ایمیل و رمز درست وارد شو و صفحهٔ حساب را باز کن. | ورود موفق باشد و اطلاعات همان حساب نمایش داده شود. |
-| C | از حساب خارج شو و صفحهٔ محافظت‌شده را دوباره بارگذاری کن. | برای مشاهدهٔ اطلاعات حساب، ورود دوباره لازم باشد. |
+The question for this run was whether the browser could open the manager dashboard before sign-in, after a valid sign-in, and after sign-out. I used a local test account, submitted the sign-in form through the browser, and inspected the corresponding requests in Burp. I revisited the same protected route at each stage and recorded the page that actually loaded.
 
-## دفتر نتایج
+## Assessment coverage
 
-هر خانه را پس از مشاهده با «موفق»، «ناموفق» یا «مسدود» به‌روز کن. در صورت ثبت نتیجه، تاریخ، نسخهٔ CRM و شناسهٔ مشاهده را هم بنویس.
-
-| نام نقش در CRM | A · رمز اشتباه | B · ورود موفق | C · خروج |
+| ID | Check | Expected behavior | Manager result |
 | --- | --- | --- | --- |
-| مدیر | موفق (A-01) | موفق (B-01) | موفق (C-01) |
-| نقش ۲ (تکمیل شود) | اجرا نشده | اجرا نشده | اجرا نشده |
-| نقش ۳ (تکمیل شود) | اجرا نشده | اجرا نشده | اجرا نشده |
-| نقش ۴ (تکمیل شود) | اجرا نشده | اجرا نشده | اجرا نشده |
+| A-01 | Submit an incorrect password, then open the dashboard | The sign-in form shows an error and the dashboard requires sign-in | Passed |
+| B-01 | Sign in with the correct password, then refresh the dashboard | The manager dashboard opens and remains available after refresh | Passed |
+| C-01 | Sign out, then open the dashboard directly in the same browser | The browser returns to the sign-in page | Passed |
 
-## قالب یک مشاهده
+## Evidence journal · 24 November 2026
 
-| شناسهٔ مشاهده | تاریخ و نسخهٔ CRM | نقش و شناسهٔ سناریو | روش HTTP و مسیر بدون پارامتر حساس | کد پاسخ | رفتار مشاهده‌شده پس از بارگذاری صفحه | نتیجه |
-| --- | --- | --- | --- | --- | --- | --- |
-| A-01 | 2026-11-24 · نسخه ثبت نشده | مدیر · A | `POST /api/auth/callback/credentials` | 200 | پاسخ حاوی `CredentialsSignin` بود. پس از ورود ناموفق، باز کردن `/manager` در همان مرورگر کاربر را به صفحهٔ ورود برگرداند. | موفق |
-| B-01 | 2026-11-24 · نسخه ثبت نشده | مدیر · B | `GET /manager` | 200 | پس از ورود با رمز درست و رفرش، داشبورد مدیر باز ماند. | موفق |
-| C-01 | 2026-11-24 · نسخه ثبت نشده | مدیر · C | `POST /api/auth/signout` سپس `GET /manager` و `GET /` | 200، 302، 200 | پس از خروج، مرورگر هنگام باز کردن داشبورد به صفحهٔ ورود برگشت. | موفق |
+**A-01 · Rejected credentials.** The credentials callback returned HTTP 200 with `CredentialsSignin` in the response URL. The form displayed “Email or password is incorrect.” Opening `/manager` in the same browser returned the user to sign-in. The callback status alone would have been insufficient to classify the attempt.
 
-این مخزن عمومی است. برای ثبت شاهد، خلاصهٔ رفتار و کد پاسخ کافی است. ایمیل واقعی، رمز، مقدار کوکی یا توکن، فایل محیطی و خروجی خام Burp را خصوصی نگه دار.
+**B-01 · Authenticated dashboard.** After a valid sign-in, the application issued a session cookie. The browser requested `GET /manager` and received HTTP 200 with the dashboard page. Refreshing the page produced another HTTP 200 and the dashboard remained visible.
+
+**C-01 · Browser access after sign-out.** The browser submitted `POST /api/auth/signout` and received HTTP 200. Opening `/manager` directly then returned HTTP 302 with a location of `/`. The browser followed the redirect and loaded the sign-in page (HTTP 200). The dashboard request after sign-out carried no session cookie.
+
+## Coverage limits and next check
+
+These observations apply to the manager browser flow in the local build. Server-side invalidation of a previously issued session token, permissions across roles, and session expiration remain unverified.
+
+The next check is to identify the intended idle and absolute session lifetimes in the CRM authentication configuration. The 30-second idle setting found so far governs database connections. The user-session timeout is still unknown.
+
+## Evidence handling
+
+The public record contains request methods, route paths, response codes, and observed browser behavior. Credentials, cookie values, session tokens, account identifiers, and raw Burp captures are excluded.
