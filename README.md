@@ -38,11 +38,13 @@ The question for this run was whether the browser could open the manager dashboa
 
 **D-01 · Configuration observation.** The project owner reviewed the local authentication configuration in `auth.ts` (line 78) and reported no custom session maximum age or separate short inactivity timeout. Auth.js documents a default session maximum age of 30 days. In the manager browser captures, the session cookie expiry moved from 24 December 09:57:49 GMT at sign-in to 24 December 10:00:33 GMT after dashboard access. This shows the browser cookie expiry was renewed during the observed session.
 
-The intended inactivity threshold has not been specified. Server-side expiry after inactivity and a fixed upper limit measured from the original sign-in have not been tested. The 30-second database connection setting applies only to the connection pool. [Auth.js session configuration](https://authjs.dev/reference/core#maxage)
+**Design confirmed by the project owner.** The CRM has no separate short idle sign-out. A session left unused is expected to remain available until its 30-day expiry measured from the last renewal. The application behavior at the expiry boundary has not been observed. The 30-second database connection setting applies only to the connection pool.
 
-## Coverage limits and next check
+Implementation reference: [Auth.js session configuration](https://authjs.dev/reference/core#maxage).
 
-The browser results apply to the manager flow in the local build. Authorization across roles and server-side invalidation of previously issued tokens remain unverified. For a short idle observation, record the elapsed time without user interaction, any background requests during that interval, and whether reopening the manager dashboard requires sign-in. Report the measured interval with the result.
+## Coverage limits
+
+The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
 
 ## Evidence handling
 
