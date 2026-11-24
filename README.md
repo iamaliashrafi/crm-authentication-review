@@ -52,6 +52,10 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **F-02 · Black-box observation (24 November 2026).** During a short manual series of invalid sign-ins, the tester reported the same generic form message throughout and no change in the HTTP status or returned error between the first and last attempts. A follow-up sign-in with the correct password succeeded: the credentials callback issued a session cookie, and the browser loaded the manager dashboard (GET /manager, HTTP 200). The account could sign in from that browser at the time of the follow-up. No throttling signal was observed in this sample. The activation threshold and runtime enforcement remain unverified.
 
+## Manager sign-in and MFA · 24 November 2026
+
+**G-01 · No second factor requested in the observed manager sign-in.** The tester confirmed that entering the correct email and password led directly to the manager dashboard. Burp showed a session cookie issued by the credentials callback, followed by a successful dashboard request. This observation covers the tested account, browser and local deployment. Enforcing MFA for manager accounts would add an independent check before granting dashboard access. [OWASP A07 prevention guidance](https://top10.owasp.org/2025/A07_2025-Authentication_Failures/)
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
