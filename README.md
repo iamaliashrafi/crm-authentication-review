@@ -79,3 +79,8 @@ The browser results apply to the manager flow in the local build. A fixed lifeti
 ## Evidence handling
 
 The public record contains request methods, route paths, response codes, and observed browser behavior. Credentials, cookie values, session tokens, account identifiers, and raw Burp captures are excluded.
+
+
+## Initial password for new users
+
+**K-01 · Create-user form observation.** The tester reported that the Superadmin manually enters the initial password. The field had no prefilled value. First-sign-in behavior remains unverified.
