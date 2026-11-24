@@ -68,6 +68,10 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **I-01 · Short password rejected (passed for the tested input).** The tester confirmed that the Superadmin reset form rejected the short password. During the short-password check in the Superadmin reset form, the tester reported the validation message `password must be at least 8 characters and at most 72 UTF-8 bytes`. The message states a minimum of 8 characters and a maximum of 72 encoded bytes. Acceptance at either boundary and the layer enforcing the rule remain unverified.
 
+## Failed sign-in logging · 24 November 2026
+
+**J-01 · Superadmin panel observation.** The tester reports that the Superadmin panel has no audit or activity view for inspecting failed sign-ins. Whether the application records these events in a server log or monitoring service remains unverified in this black-box review.
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
