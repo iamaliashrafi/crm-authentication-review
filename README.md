@@ -66,7 +66,7 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 ## Password policy in administrative resets · 24 November 2026
 
-**I-01 · Initial tester observation.** The tester reports that the Superadmin reset field permits entry of a short numeric value. Whether the application saves that value and accepts it on a fresh sign-in remains unverified. The minimum accepted length has not been established.
+**I-01 · Password length validation observed.** During the short-password check in the Superadmin reset form, the tester reported the validation message `password must be at least 8 characters and at most 72 UTF-8 bytes`. The message states a minimum of 8 characters and a maximum of 72 encoded bytes. Acceptance at either boundary and the layer enforcing the rule remain unverified.
 
 ## Coverage limits
 
