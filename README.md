@@ -58,7 +58,7 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 ## Password recovery · 24 November 2026
 
-**H-01 · Sign-in form observation.** The project owner confirmed that the local sign-in form intentionally omits a self-service password recovery option. No recovery workflow was exercised. The project owner reports that a Superadmin can reset a user’s password from the administrative panel. This administrative workflow, its role restrictions, and its effect on existing sessions have not been tested.
+**H-01 · Sign-in form observation.** The project owner confirmed that the local sign-in form intentionally omits a self-service password recovery option. No recovery workflow was exercised. The project owner reports that a Superadmin directly chooses and sets a new password for the selected user in the administrative panel. This administrative workflow, its role restrictions, and its effect on existing sessions have not been tested.
 
 ## Coverage limits
 
