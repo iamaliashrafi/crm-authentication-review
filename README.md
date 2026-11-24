@@ -64,6 +64,10 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **H-03 · Existing browser session after password reset (24 November 2026).** The tester refreshed the dashboard in a browser session that had been open before the Superadmin reset the test account’s password. The browser returned to the sign-in form. This result covers the single observed session.
 
+## Password policy in administrative resets · 24 November 2026
+
+**I-01 · Initial tester observation.** The tester reports that the Superadmin reset field permits entry of a short numeric value. Whether the application saves that value and accepts it on a fresh sign-in remains unverified. The minimum accepted length has not been established.
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
