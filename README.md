@@ -46,6 +46,10 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **E-01 · Passed for the two sampled sign-in attempts.** An existing manager account with an incorrect password and an unregistered test address both received HTTP 200 from the credentials callback. Both JSON responses returned the same error parameters, `error=CredentialsSignin&code=credentials`. The browser displayed “Email or password is incorrect.” in both cases. The status, error payload, and visible message did not distinguish the two inputs. Response timing and other account flows were outside this check.
 
+## Sign-in rate limiting · Source review
+
+**F-01 · Helper logic confirmed from an owner-supplied excerpt.** The application stores a counter per normalized email address in the database. The first call starts a fixed 15-minute window. Calls 1 through 10 return true. Call 11 and subsequent calls return false until the window expires. The first call after expiry starts a new window at 1. The helper counts invocations and receives no password-validation result. Integration with the sign-in handler, any reset after successful authentication, and the separate IP limit mentioned in a source comment remain unverified.
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
