@@ -50,7 +50,7 @@ Implementation reference: [Auth.js session configuration](https://authjs.dev/ref
 
 **F-01 · Helper logic confirmed from an owner-supplied excerpt.** The application stores a counter per normalized email address in the database. The first call starts a fixed 15-minute window. Calls 1 through 10 return true. Call 11 and subsequent calls return false until the window expires. The first call after expiry starts a new window at 1. The helper counts invocations and receives no password-validation result. Integration with the sign-in handler, any reset after successful authentication, and the separate IP limit mentioned in a source comment remain unverified.
 
-**F-02 · Black-box observation (24 November 2026).** During a short manual series of invalid sign-ins, the tester reported the same generic form message throughout and no change in the HTTP status or returned error between the first and last attempts. No throttling signal was observed in this sample. The activation threshold and runtime enforcement remain unverified.
+**F-02 · Black-box observation (24 November 2026).** During a short manual series of invalid sign-ins, the tester reported the same generic form message throughout and no change in the HTTP status or returned error between the first and last attempts. A follow-up sign-in with the correct password succeeded: the credentials callback issued a session cookie, and the browser loaded the manager dashboard (GET /manager, HTTP 200). The account could sign in from that browser at the time of the follow-up. No throttling signal was observed in this sample. The activation threshold and runtime enforcement remain unverified.
 
 ## Coverage limits
 
