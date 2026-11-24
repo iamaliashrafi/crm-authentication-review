@@ -42,6 +42,10 @@ The question for this run was whether the browser could open the manager dashboa
 
 Implementation reference: [Auth.js session configuration](https://authjs.dev/reference/core#maxage).
 
+## Sign-in error consistency · 24 November 2026
+
+**E-01 · Passed for the two sampled sign-in attempts.** An existing manager account with an incorrect password and an unregistered test address both received HTTP 200 from the credentials callback. Both JSON responses returned the same error parameters, `error=CredentialsSignin&code=credentials`. The browser displayed “Email or password is incorrect.” in both cases. The status, error payload, and visible message did not distinguish the two inputs. Response timing and other account flows were outside this check.
+
 ## Coverage limits
 
 The browser results apply to the manager flow in the local build. A fixed lifetime measured from the original sign-in, server-side invalidation of previously issued tokens, and authorization across roles remain unverified.
