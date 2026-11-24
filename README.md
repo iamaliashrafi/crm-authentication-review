@@ -34,11 +34,15 @@ The question for this run was whether the browser could open the manager dashboa
 
 **C-01 · Browser access after sign-out.** The browser submitted `POST /api/auth/signout` and received HTTP 200. Opening `/manager` directly then returned HTTP 302 with a location of `/`. The browser followed the redirect and loaded the sign-in page (HTTP 200). The dashboard request after sign-out carried no session cookie.
 
+## Session lifetime review · 24 November 2026
+
+**D-01 · Configuration observation.** The project owner reviewed the local authentication configuration in `auth.ts` (line 78) and reported no custom session maximum age or separate short inactivity timeout. Auth.js documents a default session maximum age of 30 days. In the manager browser captures, the session cookie expiry moved from 24 December 09:57:49 GMT at sign-in to 24 December 10:00:33 GMT after dashboard access. This shows the browser cookie expiry was renewed during the observed session.
+
+The intended inactivity threshold has not been specified. Server-side expiry after inactivity and a fixed upper limit measured from the original sign-in have not been tested. The 30-second database connection setting applies only to the connection pool. [Auth.js session configuration](https://authjs.dev/reference/core#maxage)
+
 ## Coverage limits and next check
 
-These observations apply to the manager browser flow in the local build. Server-side invalidation of a previously issued session token, permissions across roles, and session expiration remain unverified.
-
-The next check is to identify the intended idle and absolute session lifetimes in the CRM authentication configuration. The 30-second idle setting found so far governs database connections. The user-session timeout is still unknown.
+The browser results apply to the manager flow in the local build. Authorization across roles and server-side invalidation of previously issued tokens remain unverified. For a short idle observation, record the elapsed time without user interaction, any background requests during that interval, and whether reopening the manager dashboard requires sign-in. Report the measured interval with the result.
 
 ## Evidence handling
 
